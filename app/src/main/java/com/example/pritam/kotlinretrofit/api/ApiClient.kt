@@ -2,7 +2,7 @@ package com.example.pritam.kotlinretrofit.api
 
 import android.content.Context
 import android.util.Log
-import com.example.pritam.kotlinretrofit.model.UserModel
+import com.example.pritam.kotlinretrofit.model.PersonModel
 import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import retrofit2.Call
@@ -11,12 +11,12 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class ApiClient() {
+class ApiClient {
     private var context: Context? = null
 
     companion object {
         private val TAG = ApiClient::class.java!!.simpleName
-        private val BASE_URL = "http://primezoneinfotech.com/aryaoptic/api/"
+        private val BASE_URL = "http://google.com/aryaoptic/api/"
         private val mLock = Any()
         private var retrofit: Retrofit? = null
         private var apiClient: ApiClient? = null
@@ -55,8 +55,8 @@ class ApiClient() {
                 return this!!.retrofit!!
             }
     }
-    fun getApiCall(token:String, callback: Callback<UserModel>) {
-        var call: Call<UserModel>? = null
+    fun getApiCall(token:String, callback: Callback<PersonModel>) {
+        var call: Call<PersonModel>? = null
         try
         {
             val apiService = ApiClient.client.create(ApiInterface::class.java)

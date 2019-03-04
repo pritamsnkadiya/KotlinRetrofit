@@ -2,11 +2,15 @@ package com.example.pritam.kotlinretrofit.actvity
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.widget.Toast
 import com.example.pritam.kotlinretrofit.R
+import com.example.pritam.kotlinretrofit.adapter.PersonListAdapter
 import com.example.pritam.kotlinretrofit.api.ApiClient
-import com.example.pritam.kotlinretrofit.model.UserModel
+import com.example.pritam.kotlinretrofit.model.PersonModel
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -14,26 +18,37 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
 
     private val TAG = ApiClient::class.java!!.simpleName
-    private lateinit var userModel: UserModel
+    private lateinit var personModel: PersonModel
+    var layoutManager: RecyclerView.LayoutManager? = null
+    var adapter: PersonListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        recyclerView.setHasFixedSize(true)
+        layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = layoutManager
+        (layoutManager as LinearLayoutManager).orientation = LinearLayoutManager.VERTICAL
 
         callApiResponse("")
     }
 
     private fun callApiResponse(token: String) {
         try {
-            ApiClient.singletonApiClient.getApiCall(token, object : Callback<UserModel> {
-                override fun onResponse(call: Call<UserModel>, response: Response<UserModel>) {
-                    userModel = response.body()!!
-                    Log.d(TAG, "UserModel Data :" + userModel.toString())
-                    Toast.makeText(this@MainActivity, userModel.toString(), Toast.LENGTH_LONG).show()
+            ApiClient.singletonApiClient.getApiCall(token, object : Callback<PersonModel> {
+                override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
+                    personModel = response.body()!!
+                    Log.d(TAG, "PersonModel Data :" + personModel.toString())
+                    Toast.makeText(this@MainActivity, personModel.toString(), Toast.LENGTH_LONG).show()
+
+                    adapter = PersonListAdapter(this@MainActivity, personModel.persons!!)
+                    recyclerView.adapter = adapter
+
                 }
 
-                override fun onFailure(call: Call<UserModel>, t: Throwable) {
-                    Log.d(TAG, "Fetching Data Error : " + t.getStackTrace())
+                override fun onFailure(call: Call<PersonModel>, t: Throwable) {
+                    Log.d(TAG, "Fetching Data Error : " + t.stackTrace)
                     //Toast.makeText (getApplicationContext (), "Fetching Data Error" + t.getMessage (), Toast.LENGTH_LONG).show ();
                 }
             })

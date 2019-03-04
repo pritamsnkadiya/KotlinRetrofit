@@ -1,6 +1,6 @@
 package com.example.pritam.kotlinretrofit.api
 
-import com.example.pritam.kotlinretrofit.model.UserModel
+import com.example.pritam.kotlinretrofit.model.PersonModel
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -12,7 +12,7 @@ interface ApiInterface {
 
     @Headers("Accept: application/json")
     @GET
-    fun getApiCall(@Url url:String, @Header("Authorization") tokenId:String): Call<UserModel>
+    fun getApiCall(@Url url:String, @Header("Authorization") tokenId:String): Call<PersonModel>
 
 /*    @Headers("content-type: application/json")
     @POST("/aryaoptic/api/payment")
